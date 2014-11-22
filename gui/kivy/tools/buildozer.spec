@@ -29,7 +29,7 @@ source.exclude_exts = spec
 #version.filename = %(source.dir)s/main.py
 
 # (str) Application versioning (method 2)
-version = 1.9.8
+version = 2.0
 
 # (list) Application requirements
 requirements = tlslite, openssl, pyopenssl, pil, qrcode, ecdsa, pbkdf2, pyasn1, pyasn1-modules,  plyer==master, kivy==master
