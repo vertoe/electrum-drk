@@ -268,11 +268,11 @@ class InstallWizard(Widget):
                 # in initial phase create mode
                 # save seed with password
                 wallet.add_seed(seed, password)
-                sid = None if mode == 'create' else 'hot'
+                wallet.create_master_keys(password)
 
                 if mode == 'create':
                     def create(password):
-                        wallet.create_accounts(password)
+                        wallet.create_main_account(password)
                         wallet.synchronize()  # generate first addresses offline
 
                     self.waiting_dialog(partial(create, password),
