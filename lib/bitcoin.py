@@ -22,6 +22,7 @@ import base64
 import re
 import sys
 import hmac
+import darkcoin_hash as darkhash
 
 import version
 from util import print_error, InvalidPassword
@@ -136,9 +137,9 @@ def sha256(x):
     return hashlib.sha256(x).digest()
 
 
-def Hash(x):
+def Hash(x): #Import darkcoin_hash as darkhash.getPoWHash(x)
     if type(x) is unicode: x=x.encode('utf-8')
-    return sha256(sha256(x))
+    return darkhash.getPoWHash(x)
 
 
 hash_encode = lambda x: x[::-1].encode('hex')
@@ -235,7 +236,7 @@ def public_key_to_bc_address(public_key):
     h160 = hash_160(public_key)
     return hash_160_to_bc_address(h160)
 
-def hash_160_to_bc_address(h160, addrtype = 0):
+def hash_160_to_bc_address(h160, addrtype = 204): #change to Darkcoin private key type. 
     vh160 = chr(addrtype) + h160
     h = Hash(vh160)
     addr = vh160 + h[0:4]
@@ -320,12 +321,12 @@ def PrivKeyToSecret(privkey):
     return privkey[9:9+32]
 
 
-def SecretToASecret(secret, compressed=False, addrtype=0):
+def SecretToASecret(secret, compressed=False, addrtype=204): #darkcoin
     vchIn = chr((addrtype+128)&255) + secret
     if compressed: vchIn += '\01'
     return EncodeBase58Check(vchIn)
 
-def ASecretToSecret(key, addrtype=0):
+def ASecretToSecret(key, addrtype=204): #darkcoin
     vch = DecodeBase58Check(key)
     if vch and vch[0] == chr((addrtype+128)&255):
         return vch[1:]
@@ -404,7 +405,7 @@ from ecdsa.util import string_to_number, number_to_string
 def msg_magic(message):
     varint = var_int(len(message))
     encoded_varint = "".join([chr(int(varint[i:i+2], 16)) for i in xrange(0, len(varint), 2)])
-    return "\x18Bitcoin Signed Message:\n" + encoded_varint + message
+    return "\x18Darkcoin Signed Message:\n" + encoded_varint + message
 
 
 def verify_message(address, signature, message):
@@ -659,23 +660,23 @@ def _CKD_pub(cK, c, s):
     cK_n = GetPubKey(public_key.pubkey,True)
     return cK_n, c_n
 
+#Base 58 Header Prefixes. 
+DARKCOIN_HEADER_PRIV = "02fe52cc" #Darkcoin/src/chainparams L 73 list_of(0x02)(0xFE)(0x52)(0xCC);
+DARKCOIN_HEADER_PUB = "02fe52f8" #Darkcoin/src/chainparams L 72  list_of(0x02)(0xFE)(0x52)(0xF8);
 
-BITCOIN_HEADER_PRIV = "0488ade4"
-BITCOIN_HEADER_PUB = "0488b21e"
+TESTNET_HEADER_PRIV = "3a805837" #Darkcoin/src/chainparams L 141 list_of(0x3a)(0x80)(0x58)(0x37);
+TESTNET_HEADER_PUB = "3a8061a0" #Darkcoin/src/chainparams L 140 list_of(0x3a)(0x80)(0x61)(0xa0);
 
-TESTNET_HEADER_PRIV = "04358394"
-TESTNET_HEADER_PUB = "043587cf"
-
-BITCOIN_HEADERS = (BITCOIN_HEADER_PUB, BITCOIN_HEADER_PRIV)
+DARKCOIN_HEADERS = (DARKCOIN_HEADER_PUB, DARKCOIN_HEADER_PRIV)
 TESTNET_HEADERS = (TESTNET_HEADER_PUB, TESTNET_HEADER_PRIV)
 
 def _get_headers(testnet):
-    """Returns the correct headers for either testnet or bitcoin, in the form
+    """Returns the correct headers for either testnet or darkcoin, in the form
     of a 2-tuple, like (public, private)."""
     if testnet:
         return TESTNET_HEADERS
     else:
-        return BITCOIN_HEADERS
+        return DARKCOIN_HEADERS
 
 
 def deserialize_xkey(xkey):
@@ -687,8 +688,8 @@ def deserialize_xkey(xkey):
     # Determine if the key is a bitcoin key or a testnet key.
     if xkey_header in TESTNET_HEADERS:
         head = TESTNET_HEADER_PRIV
-    elif xkey_header in BITCOIN_HEADERS:
-        head = BITCOIN_HEADER_PRIV
+    elif xkey_header in DARKCOIN_HEADERS:
+        head = DARKCOIN_HEADER_PRIV
     else:
         raise Exception("Unknown xkey header: '%s'" % xkey_header)
 
@@ -729,7 +730,7 @@ def xpub_from_xprv(xprv, testnet=False):
 def bip32_root(seed, testnet=False):
     import hmac
     header_pub, header_priv = _get_headers(testnet)
-    I = hmac.new("Bitcoin seed", seed, hashlib.sha512).digest()
+    I = hmac.new("Darkcoin seed", seed, hashlib.sha512).digest()
     master_k = I[0:32]
     master_c = I[32:]
     K, cK = get_pubkeys_from_secret(master_k)
