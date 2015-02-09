@@ -236,7 +236,7 @@ def public_key_to_bc_address(public_key):
     h160 = hash_160(public_key)
     return hash_160_to_bc_address(h160)
 
-def hash_160_to_bc_address(h160, addrtype = 204): #change to Darkcoin private key type. 
+def hash_160_to_bc_address(h160, addrtype = 76): #change to Darkcoin public key type. 
     vh160 = chr(addrtype) + h160
     h = Hash(vh160)
     addr = vh160 + h[0:4]
@@ -321,12 +321,12 @@ def PrivKeyToSecret(privkey):
     return privkey[9:9+32]
 
 
-def SecretToASecret(secret, compressed=False, addrtype=204): #darkcoin
+def SecretToASecret(secret, compressed=False, addrtype=76): #darkcoin
     vchIn = chr((addrtype+128)&255) + secret
     if compressed: vchIn += '\01'
     return EncodeBase58Check(vchIn)
 
-def ASecretToSecret(key, addrtype=204): #darkcoin
+def ASecretToSecret(key, addrtype=76): #darkcoin
     vch = DecodeBase58Check(key)
     if vch and vch[0] == chr((addrtype+128)&255):
         return vch[1:]
