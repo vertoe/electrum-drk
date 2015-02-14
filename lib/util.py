@@ -49,11 +49,11 @@ def print_json(obj):
 
 def user_dir():
     if "HOME" in os.environ:
-        return os.path.join(os.environ["HOME"], ".electrum")
+        return os.path.join(os.environ["HOME"], ".electrum-drk")
     elif "APPDATA" in os.environ:
-        return os.path.join(os.environ["APPDATA"], "Electrum")
+        return os.path.join(os.environ["APPDATA"], "Electrum-DRK")
     elif "LOCALAPPDATA" in os.environ:
-        return os.path.join(os.environ["LOCALAPPDATA"], "Electrum")
+        return os.path.join(os.environ["LOCALAPPDATA"], "Electrum-DRK")
     elif 'ANDROID_DATA' in os.environ:
         try:
             import jnius
@@ -62,7 +62,7 @@ def user_dir():
             return _dir + '/electrum/'
         except ImportError:
             pass
-        return "/sdcard/electrum/"
+        return "/sdcard/electrum-drk/"
     else:
         #raise Exception("No home directory found in environment variables.")
         return
