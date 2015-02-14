@@ -90,15 +90,15 @@ def usr_share_dir():
 def appdata_dir():
     """Find the path to the application data directory; add an electrum folder and return path."""
     if platform.system() == "Windows":
-        return os.path.join(os.environ["APPDATA"], "Electrum")
+        return os.path.join(os.environ["APPDATA"], "Electrum-DRK")
     elif platform.system() == "Linux":
-        return os.path.join(usr_share_dir(), "electrum")
+        return os.path.join(usr_share_dir(), "electrum-drk")
     elif (platform.system() == "Darwin" or
           platform.system() == "DragonFly" or
           platform.system() == "OpenBSD" or
           platform.system() == "FreeBSD" or
 	  platform.system() == "NetBSD"):
-        return "/Library/Application Support/Electrum"
+        return "/Library/Application Support/Electrum-DRK"
     else:
         raise Exception("Unknown system")
 
@@ -200,7 +200,7 @@ def parse_URI(uri):
         return uri, None, None, None, None
 
     u = urlparse.urlparse(uri)
-    assert u.scheme == 'bitcoin'
+    assert u.scheme == 'darkcoin'
 
     address = u.path
     valid_address = bitcoin.is_address(address)
