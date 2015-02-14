@@ -6,17 +6,17 @@ from sys import stderr
 from time import sleep
 from base64 import b64encode, b64decode
 
-import electrum
-from electrum.account import BIP32_Account
-from electrum.bitcoin import EncodeBase58Check, public_key_to_bc_address, bc_address_to_hash_160
-from electrum.i18n import _
-from electrum.plugins import BasePlugin, hook
-from electrum.transaction import deserialize
-from electrum.wallet import BIP32_HD_Wallet
-from electrum.util import print_error
+import electrum_drk as electrum
+from electrum_drk.account import BIP32_Account
+from electrum_drk.bitcoin import EncodeBase58Check, public_key_to_bc_address, bc_address_to_hash_160
+from electrum_drk.i18n import _
+from electrum_drk.plugins import BasePlugin, hook
+from electrum_drk.transaction import deserialize
+from electrum_drk.wallet import BIP32_HD_Wallet
+from electrum_drk.util import print_error
 
-from electrum_gui.qt.password_dialog import make_password_dialog, run_password_dialog
-from electrum_gui.qt.util import ok_cancel_buttons, EnterButton
+from electrum_drk_gui.qt.password_dialog import make_password_dialog, run_password_dialog
+from electrum_drk_gui.qt.util import ok_cancel_buttons, EnterButton
 
 try:
     from trezorlib.client import types
@@ -168,7 +168,7 @@ class Plugin(BasePlugin):
             return False
 
 
-from electrum.wallet import pw_decode, bip32_private_derivation, bip32_root
+from electrum_drk.wallet import pw_decode, bip32_private_derivation, bip32_root
 
 class TrezorWallet(BIP32_HD_Wallet):
     wallet_type = 'trezor'

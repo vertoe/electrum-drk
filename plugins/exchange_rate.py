@@ -9,10 +9,10 @@ import threading
 import time
 import re
 from decimal import Decimal
-from electrum.plugins import BasePlugin, hook
-from electrum.i18n import _
-from electrum_gui.qt.util import *
-from electrum_gui.qt.amountedit import AmountEdit
+from electrum_drk.plugins import BasePlugin, hook
+from electrum_drk.i18n import _
+from electrum_drk_gui.qt.util import *
+from electrum_drk_gui.qt.amountedit import AmountEdit
 
 
 EXCHANGES = ["BitcoinAverage",
@@ -243,7 +243,7 @@ class Exchanger(threading.Thread):
         quote_currencies = {}
         try:
             for r in jsonresp:
-                if r[:7] == "btc_to_":
+                if r[:7] == "drk_to_":
                     quote_currencies[r[7:].upper()] = self._lookup_rate_cb(jsonresp, r)
             with self.lock:
                 self.quote_currencies = quote_currencies
@@ -290,8 +290,8 @@ class Exchanger(threading.Thread):
             return
         quote_currencies = {}
         try:
-            for r in jsonresp["BTC"]:
-                quote_currencies[r] = Decimal(jsonresp["BTC"][r])
+            for r in jsonresp["DRK"]:
+                quote_currencies[r] = Decimal(jsonresp["DRK"][r])
             with self.lock:
                 self.quote_currencies = quote_currencies
         except KeyError:
@@ -375,7 +375,7 @@ class Plugin(BasePlugin):
         r[0] = self.create_fiat_balance_text(Decimal(btc_balance) / 100000000)
 
     def get_fiat_price_text(self, r):
-        # return BTC price as: 123.45 USD
+        # return DRK price as: 123.45 USD
         r[0] = self.create_fiat_balance_text(1)
         quote = r[0]
         if quote:
@@ -452,12 +452,12 @@ class Plugin(BasePlugin):
             cur_currency = self.fiat_unit()
             if cur_currency == "VEF":
                 try:
-                    self.resp_hist = self.exchanger.get_json('api.bitcoinvenezuela.com', "/historical/index.php?coin=BTC")['VEF_BTC']
+                    self.resp_hist = self.exchanger.get_json('api.bitcoinvenezuela.com', "/historical/index.php?coin=DRK")['VEF_BTC']
                 except Exception:
                     return
             elif cur_currency == "ARS":
                 try:
-                    self.resp_hist = self.exchanger.get_json('api.bitcoinvenezuela.com', "/historical/index.php?coin=BTC")['ARS_BTC']
+                    self.resp_hist = self.exchanger.get_json('api.bitcoinvenezuela.com', "/historical/index.php?coin=DRK")['ARS_BTC']
                 except Exception:
                     return
             else:

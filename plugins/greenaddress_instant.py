@@ -23,12 +23,12 @@ import sys
 
 from PyQt4.QtGui import QMessageBox, QApplication, QPushButton
 
-from electrum.account import BIP32_Account
-from electrum import bitcoin, util
-from electrum import transaction
-from electrum.plugins import BasePlugin, hook
-from electrum.i18n import _
-from electrum.bitcoin import regenerate_key
+from electrum_drk.account import BIP32_Account
+from electrum_drk import bitcoin, util
+from electrum_drk import transaction
+from electrum_drk.plugins import BasePlugin, hook
+from electrum_drk.i18n import _
+from electrum_drk.bitcoin import regenerate_key
 
 
 description = _("Allows validating if your transactions have instant confirmations by GreenAddress")
@@ -92,7 +92,7 @@ class Plugin(BasePlugin):
             # 2. send the request
             connection = httplib.HTTPSConnection('greenaddress.it')
             connection.request("GET", ("/verify/?signature=%s&txhash=%s" % (urllib.quote(sig), tx.hash())),
-                None, {'User-Agent': 'Electrum'})
+                None, {'User-Agent': 'Electrum-DRK'})
             response = connection.getresponse()
             response = json.loads(response.read())
 

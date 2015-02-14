@@ -29,20 +29,20 @@ from urllib import quote
 from PyQt4.QtGui import *
 from PyQt4.QtCore import *
 
-import electrum
-from electrum import bitcoin
-from electrum.bitcoin import *
-from electrum.mnemonic import Mnemonic
-from electrum import version
-from electrum.wallet import Wallet_2of3
-from electrum.i18n import _
-from electrum.plugins import BasePlugin, run_hook, hook
+import electrum_drk as electrum
+from electrum_drk import bitcoin
+from electrum_drk.bitcoin import *
+from electrum_drk.mnemonic import Mnemonic
+from electrum_drk import version
+from electrum_drk.wallet import Wallet_2of3
+from electrum_drk.i18n import _
+from electrum_drk.plugins import BasePlugin, run_hook, hook
 
-from electrum_gui.qt.util import text_dialog, EnterButton, WaitingDialog
-from electrum_gui.qt.qrcodewidget import QRCodeWidget
-from electrum_gui.qt import ok_cancel_buttons, ok_cancel_buttons2, close_button
-from electrum_gui.qt.amountedit import AmountEdit
-from electrum_gui.qt.main_window import StatusBarButton
+from electrum_drk_gui.qt.util import text_dialog, EnterButton, WaitingDialog
+from electrum_drk_gui.qt.qrcodewidget import QRCodeWidget
+from electrum_drk_gui.qt import ok_cancel_buttons, ok_cancel_buttons2, close_button
+from electrum_drk_gui.qt.amountedit import AmountEdit
+from electrum_drk_gui.qt.main_window import StatusBarButton
 
 from decimal import Decimal
 
@@ -168,7 +168,7 @@ class TrustedCoinCosignerClient(object):
         return self.send_request('post', relative_url, payload, headers)
 
 
-server = TrustedCoinCosignerClient(user_agent="Electrum/" + version.ELECTRUM_VERSION)
+server = TrustedCoinCosignerClient(user_agent="Electrum-DRK/" + version.ELECTRUM_VERSION)
 
 
 class Wallet_2fa(Wallet_2of3):
@@ -293,7 +293,7 @@ class Plugin(BasePlugin):
         msg = [ 
             _('Your wallet file is:') + " %s"%os.path.abspath(wallet.storage.path),
             _('You need to be online in order to complete the creation of your wallet.'),
-            _('If you generated your seed on an offline computer, click on "%s" to close this window, move your wallet file to an online computer and reopen it with Electrum.') % _('Close'),
+            _('If you generated your seed on an offline computer, click on "%s" to close this window, move your wallet file to an online computer and reopen it with Electrum-DRK.') % _('Close'),
             _('If you are online, click on "%s" to continue.') % _('Next')
         ]
         return window.question('\n\n'.join(msg), no_label=_('Close'), yes_label=_('Next'))
@@ -431,7 +431,7 @@ class Plugin(BasePlugin):
 
 
     def need_server(self, tx):
-        from electrum.account import BIP32_Account
+        from electrum_drk.account import BIP32_Account
         # Detect if the server is needed
         long_id, short_id = self.get_user_id()
         xpub3 = self.wallet.master_public_keys['x3/']

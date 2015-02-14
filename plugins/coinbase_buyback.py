@@ -22,14 +22,14 @@ try:
 except ImportError as e:
     loaded_qweb = False
 
-from electrum.plugins import BasePlugin, hook
-from electrum.i18n import _, set_language
-from electrum.util import user_dir
-from electrum.util import appdata_dir
-from electrum.util import format_satoshis
-from electrum_gui.qt import ElectrumGui
+from electrum_drk.plugins import BasePlugin, hook
+from electrum_drk.i18n import _, set_language
+from electrum_drk.util import user_dir
+from electrum_drk.util import appdata_dir
+from electrum_drk.util import format_satoshis
+from electrum_drk_gui.qt import ElectrumGui
 
-SATOSHIS_PER_BTC = float(100000000)
+SATOSHIS_PER_DRK= float(100000000)
 COINBASE_ENDPOINT = 'https://coinbase.com'
 SCOPE = 'buy'
 REDIRECT_URI = 'urn:ietf:wg:oauth:2.0:oob'
