@@ -1,6 +1,7 @@
-import time, electrum, Queue
-from electrum import Interface, SimpleConfig
-from electrum.network import filter_protocol, parse_servers
+import time, Queue
+from electrum_drk import Interface, SimpleConfig
+from electrum_drk.network import filter_protocol, parse_servers
+import electrum_drk as electrum
 
 # electrum.util.set_verbosity(1)
 
