@@ -34,11 +34,11 @@ from PyQt4.QtGui import *
 from PyQt4.QtCore import *
 import PyQt4.QtCore as QtCore
 
-from electrum.i18n import _, set_language
-from electrum.util import print_error, print_msg
-from electrum.plugins import run_hook
-from electrum import WalletStorage, Wallet
-from electrum.bitcoin import MIN_RELAY_TX_FEE
+from electrum_drk.i18n import _, set_language
+from electrum_drk.util import print_error, print_msg
+from electrum_drk.plugins import run_hook
+from electrum_drk import WalletStorage, Wallet
+from electrum_drk.bitcoin import MIN_RELAY_TX_FEE
 
 try:
     import icons_rc
@@ -80,7 +80,7 @@ class ElectrumGui:
         m.addAction(_("Show/Hide"), self.show_or_hide)
         m.addAction(_("Dark/Light"), self.toggle_tray_icon)
         m.addSeparator()
-        m.addAction(_("Exit Electrum"), self.close)
+        m.addAction(_("Exit Electrum-DRK"), self.close)
         self.tray.setContextMenu(m)
 
     def toggle_tray_icon(self):

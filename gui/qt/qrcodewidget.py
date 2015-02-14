@@ -6,9 +6,9 @@ import PyQt4.QtGui as QtGui
 import os
 import qrcode
 
-import electrum
-from electrum import bmp
-from electrum.i18n import _
+import electrum_drk
+from electrum_drk import bmp
+from electrum_drk.i18n import _
 
 
 class QRCodeWidget(QWidget):

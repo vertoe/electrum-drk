@@ -22,9 +22,9 @@
 from __future__ import absolute_import
 import android
 
-from electrum import SimpleConfig, Wallet, WalletStorage, format_satoshis, mnemonic_encode, mnemonic_decode
-from electrum.bitcoin import is_valid
-from electrum import util
+from electrum_drk import SimpleConfig, Wallet, WalletStorage, format_satoshis, mnemonic_encode, mnemonic_decode
+from electrum_drk.bitcoin import is_valid
+from electrum_drk import util
 from decimal import Decimal
 import datetime, re
 
@@ -166,7 +166,7 @@ def make_layout(s, scrollable = False):
 
         <TextView
           android:id="@+id/textElectrum"
-          android:text="Electrum"
+          android:text="Electrum-DRK"
           android:textSize="7pt"
           android:textColor="#ff4444ff"
           android:gravity="left"
@@ -453,7 +453,7 @@ def pay_to(recipient, amount, fee, label):
     else:
         password = None
 
-    droid.dialogCreateSpinnerProgress("Electrum", "signing transaction...")
+    droid.dialogCreateSpinnerProgress("Electrum-DRK", "signing transaction...")
     droid.dialogShow()
 
     try:
@@ -487,7 +487,7 @@ def make_new_contact():
     if r:
         data = r['extras']['SCAN_RESULT']
         if data:
-            if re.match('^bitcoin:', data):
+            if re.match('^darkcoin:', data):
                 address, _, _, _, _ = util.parse_URI(data)
             elif is_valid(data):
                 address = data
@@ -561,7 +561,7 @@ def main_loop():
                 if receive_addr:
                     amount = modal_input('Amount', 'Amount you want receive. ', '', "numberDecimal")
                     if amount:
-                        receive_addr = 'bitcoin:%s?amount=%s'%(receive_addr, amount)
+                        receive_addr = 'darkcoin:%s?amount=%s'%(receive_addr, amount)
 
                 if not receive_addr:
                     out = None
@@ -595,7 +595,7 @@ def payto_loop():
                 amount = droid.fullQueryDetail('amount').result.get('text')
 
                 if not is_valid(recipient):
-                    modal_dialog('Error','Invalid Bitcoin address')
+                    modal_dialog('Error','Invalid Darkcoin address')
                     continue
 
                 try:
@@ -618,7 +618,7 @@ def payto_loop():
                 if r:
                     data = r['extras']['SCAN_RESULT']
                     if data:
-                        if re.match('^bitcoin:', data):
+                        if re.match('^darkcoin:', data):
                             payto, amount, label, _, _ = util.parse_URI(data)
                             droid.fullSetProperty("recipient", "text",payto)
                             droid.fullSetProperty("amount", "text", amount)
