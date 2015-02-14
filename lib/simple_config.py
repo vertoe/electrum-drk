@@ -125,11 +125,18 @@ class SimpleConfig(object):
         if not self.path: return
 
         path = os.path.join(self.path, "config")
+
+        # check for storage_state
+        #if not self.storage_available():
+        #    return
+
         s = repr(self.user_config)
+
+
         f = open(path,"w")
         f.write( s )
         f.close()
-        if self.get('gui') != 'android':
+        if self.get('gui') not in  ('android', 'kivy'):
             import stat
             os.chmod(path, stat.S_IREAD | stat.S_IWRITE)
 
