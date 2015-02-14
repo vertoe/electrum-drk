@@ -136,8 +136,11 @@ def op_push(i):
 def sha256(x):
     return hashlib.sha256(x).digest()
 
+def Hash(x):
+    if type(x) is unicode: x=x.encode('utf-8')
+    return sha256(sha256(x))
 
-def Hash(x): #Import darkcoin_hash as darkhash.getPoWHash(x)
+def HashX11(x):
     if type(x) is unicode: x=x.encode('utf-8')
     return darkhash.getPoWHash(x)
 
@@ -671,7 +674,7 @@ DARKCOIN_HEADERS = (DARKCOIN_HEADER_PUB, DARKCOIN_HEADER_PRIV)
 TESTNET_HEADERS = (TESTNET_HEADER_PUB, TESTNET_HEADER_PRIV)
 
 def _get_headers(testnet):
-    """Returns the correct headers for either testnet or darkcoin, in the form
+    """Returns the correct headers for either testnet or bitcoin, in the form
     of a 2-tuple, like (public, private)."""
     if testnet:
         return TESTNET_HEADERS
@@ -730,7 +733,7 @@ def xpub_from_xprv(xprv, testnet=False):
 def bip32_root(seed, testnet=False):
     import hmac
     header_pub, header_priv = _get_headers(testnet)
-    I = hmac.new("Darkcoin seed", seed, hashlib.sha512).digest()
+    I = hmac.new("Bitcoin seed", seed, hashlib.sha512).digest()
     master_k = I[0:32]
     master_c = I[32:]
     K, cK = get_pubkeys_from_secret(master_k)

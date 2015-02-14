@@ -20,6 +20,7 @@
 import threading, time, Queue, os, sys, shutil
 from util import user_dir, appdata_dir, print_error
 from bitcoin import *
+import darkcoin_hash as darkhash
 
 
 class Blockchain(threading.Thread):
@@ -32,7 +33,7 @@ class Blockchain(threading.Thread):
         self.lock = threading.Lock()
         self.local_height = 0
         self.running = False
-        self.headers_url = 'http://headers.electrum.org/blockchain_headers'
+        self.headers_url = 'http://headers-drk.XXXXXX/blockchain_headers'
         self.set_local_height()
         self.queue = Queue.Queue()
 
@@ -113,12 +114,12 @@ class Blockchain(threading.Thread):
             height = header.get('block_height')
 
             prev_hash = self.hash_header(prev_header)
-            bits, target = self.get_target(height/2016, chain)
+#            bits, target = self.get_target(height/2016, chain)
             _hash = self.hash_header(header)
             try:
                 assert prev_hash == header.get('prev_block_hash')
-                assert bits == header.get('bits')
-                assert int('0x'+_hash,16) < target
+#                assert bits == header.get('bits')
+#                assert int('0x'+_hash,16) < target
             except Exception:
                 return False
 
@@ -140,7 +141,7 @@ class Blockchain(threading.Thread):
             if prev_header is None: raise
             previous_hash = self.hash_header(prev_header)
 
-        bits, target = self.get_target(index)
+#        bits, target = self.get_target(index)
 
         for i in range(num):
             height = index*2016 + i
@@ -148,8 +149,8 @@ class Blockchain(threading.Thread):
             header = self.header_from_string(raw_header)
             _hash = self.hash_header(header)
             assert previous_hash == header.get('prev_block_hash')
-            assert bits == header.get('bits')
-            assert int('0x'+_hash,16) < target
+#            assert bits == header.get('bits')
+#            assert int('0x'+_hash,16) < target
 
             previous_header = header
             previous_hash = _hash
@@ -182,7 +183,7 @@ class Blockchain(threading.Thread):
 
     def hash_header(self, header):
         return rev_hex(Hash(self.header_to_string(header).decode('hex')).encode('hex'))
-
+        
     def path(self):
         return os.path.join( self.config.path, 'blockchain_headers')
 
@@ -256,7 +257,7 @@ class Blockchain(threading.Thread):
                     last = h
 
         nActualTimespan = last.get('timestamp') - first.get('timestamp')
-        nTargetTimespan = 14*24*60*60
+        nTargetTimespan = 24*60*60
         nActualTimespan = max(nActualTimespan, nTargetTimespan/4)
         nActualTimespan = min(nActualTimespan, nTargetTimespan*4)
 
